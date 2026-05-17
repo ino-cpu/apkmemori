@@ -210,14 +210,18 @@
         .nav-item.active { color: #00f2fe; text-shadow: 0 0 8px rgba(0, 242, 254, 0.4); }
         .nav-icon { font-size: 18px; margin-bottom: 4px; }
 
-        /* Sidebar Drawer */
+        /* Sidebar Drawer Styling */
         .sidebar { position: fixed; top: 0; left: -290px; width: 290px; height: 100%; background: #0f1115; border-right: 1px solid rgba(102, 252, 241, 0.15); z-index: 3000; transition: left 0.3s cubic-bezier(0.1, 0.9, 0.2, 1); padding: 25px 20px; display: flex; flex-direction: column; }
         .sidebar.open { left: 0; }
         .sidebar-header { font-size: 11px; font-weight: 800; color: rgba(102, 252, 241, 0.6); padding-bottom: 8px; margin-bottom: 12px; text-transform: uppercase; }
         .sidebar-menu-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+        
+        /* Menu Utama Sidebar Pengarah Dinamik */
+        .dynamic-folder-list { display: flex; flex-direction: column; gap: 10px; }
+
         .sidebar-item { width: 100%; padding: 12px 16px; background: rgba(31, 40, 51, 0.3); border: 1px solid rgba(102, 252, 241, 0.15); border-radius: 10px; color: #a4a7ab; font-size: 12px; font-weight: 600; text-align: center; cursor: pointer; text-transform: uppercase; }
         .sidebar-item:hover, .sidebar-item.active { color: #00f2fe; border-color: #00f2fe; box-shadow: 0 0 10px rgba(0, 242, 254, 0.3); }
-        .sidebar-divider { height: 1px; background: rgba(102, 252, 241, 0.1); margin: 20px 0; }
+        .sidebar-divider { height: 1px; background: rgba(102, 252, 241, 0.1); margin: 20px 0; flex-shrink: 0; }
         .sidebar-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); z-index: 2500; display: none; }
         .sidebar-overlay.active { display: block; }
         .brand-watermark { position: fixed; bottom: 80px; right: 12px; font-size: 10px; color: rgba(102, 252, 241, 0.35); pointer-events: none; z-index: 999; text-transform: lowercase; font-style: italic; }
@@ -297,13 +301,15 @@
     </div>
 
     <div class="sidebar" id="sidebarMenu">
-        <div class="sidebar-top" style="overflow-y: auto; flex-grow: 1;">
+        <div class="sidebar-top" style="overflow-y: auto; flex-grow: 1; display: flex; flex-direction: column;">
             <div class="sidebar-header">Daftar Katalog Album</div>
-            <div class="sidebar-menu-list" id="sidebarList"></div>
+            
+            <div class="dynamic-folder-list" id="sidebarList"></div>
+            
             <div class="sidebar-divider"></div>
             <div class="sidebar-header">Informasi & Bantuan</div>
             <div class="sidebar-menu-list">
-                <button class="sidebar-item" style="border-color: rgba(0, 242, 254, 0.4); color: #00f2fe;" onclick="panggilUlangPanduan()">💡 PANDUAN DOWNLOAD</button>
+                <button class="sidebar-item" style="border-color: rgba(0, 242, 254, 0.4); color: #00f2fe; margin-bottom: 10px;" onclick="panggilUlangPanduan()">💡 PANDUAN DOWNLOAD</button>
                 <button class="sidebar-item" onclick="switchView('viewContact')">Hubungi Developer</button>
             </div>
         </div>
@@ -333,7 +339,7 @@
 
     <script>
         // ===================================================================
-        // 📥 MEGA DATABASE ARSIP MASSAL JAVASCRIPT
+        // 📥 MASTER ARSIP DATABASE MASSAL 100% VALID
         // ===================================================================
         const DATA_MASTER_GALERI = [
             // --- KATEGORI: FOTO ANGKATAN ---
@@ -737,24 +743,28 @@
 
             buildSidebarMenu();
             renderCategoryGrid("SEMUA FOTO");
-            periksaPanduanFirstTime();
+            periksaPanduanFirstTime(); // Jalankan validasi lokal popup
         }
 
+        // 🚨 LOGIKA AMNESIA FIX: Validasi ketat LocalStorage murni dipisah mandiri
         function periksaPanduanFirstTime() {
             const sudahPaham = localStorage.getItem('memori_guide_paham');
-            if (!sudahPaham) {
-                document.getElementById('guidePopup').classList.add('active');
+            if (sudahPaham === 'true') {
+                document.getElementById('guidePopup').style.display = 'none';
+            } else {
+                document.getElementById('guidePopup').style.display = 'flex';
             }
         }
+        
         function tutupPopupPanduan() {
             localStorage.setItem('memori_guide_paham', 'true');
-            document.getElementById('guidePopup').classList.remove('active');
+            document.getElementById('guidePopup').style.display = 'none';
         }
 
-        // 🚨 FUNGSI BARU: Pemanggil ulang popup panduan dari klik item di Sidebar
+        // 🚨 PENGAKTIF ULANG PANDUAN VIA SIDEBAR
         function panggilUlangPanduan() {
-            closeSidebar(); // Tutup drawer sidebar dulu biar gak numpuk
-            document.getElementById('guidePopup').classList.add('active');
+            closeSidebar(); 
+            document.getElementById('guidePopup').style.display = 'flex';
         }
 
         function buildSidebarMenu() {
