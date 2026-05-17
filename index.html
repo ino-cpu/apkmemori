@@ -192,7 +192,7 @@
         .btn-primary { background: linear-gradient(45deg, #00f2fe, #4facfe); color: #0b0c10; box-shadow: 0 4px 15px rgba(0, 242, 254, 0.4); }
         .btn-close { background: rgba(255, 255, 255, 0.08); color: #ffffff; border: 1px solid rgba(255,255,255,0.05); }
 
-        /* 🚨 STYLING BARU: POPUP PANDUAN AWAL MASUK ESTETIK */
+        /* Popup Panduan Awal Masuk Estetik */
         .guide-popup-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); z-index: 5000; display: none; justify-content: center; align-items: center; padding: 20px; }
         .guide-popup-overlay.active { display: flex; }
         .guide-card { background: #11141a; border: 1px solid rgba(0, 242, 254, 0.25); border-radius: 16px; width: 100%; max-width: 420px; padding: 24px; text-align: center; box-shadow: 0 0 30px rgba(0, 242, 254, 0.2); animation: popupAnimate 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
@@ -301,9 +301,9 @@
             <div class="sidebar-header">Daftar Katalog Album</div>
             <div class="sidebar-menu-list" id="sidebarList"></div>
             <div class="sidebar-divider"></div>
-            <div class="sidebar-header">Informasi Aplikasi</div>
+            <div class="sidebar-header">Informasi & Bantuan</div>
             <div class="sidebar-menu-list">
-                <button class="sidebar-item" onclick="switchView('viewAbout')">Tentang Aplikasi</button>
+                <button class="sidebar-item" style="border-color: rgba(0, 242, 254, 0.4); color: #00f2fe;" onclick="panggilUlangPanduan()">💡 PANDUAN DOWNLOAD</button>
                 <button class="sidebar-item" onclick="switchView('viewContact')">Hubungi Developer</button>
             </div>
         </div>
@@ -402,7 +402,7 @@
             { "id": "1GL-nBz81APEjrsqKgz5LAXwpY5MZGtle", "kategori": "FOTO DRONE" },
             { "id": "16C86e8Arw3lc7FW6UtUryYKQ268oKaa5", "kategori": "FOTO DRONE" },
 
-            // --- KATEGORI: FOTO FOTO PANITIA ---
+            // --- KATEGORI: FOTO PANITIA ---
             { "id": "1f5l7EThqjB7hs77txQcaxgPbKDMgVlLy", "kategori": "FOTO PANITIA" },
             { "id": "1ZQZJpPG3xB2-Sd3ZzIwtKVCUDmSD8-qo", "kategori": "FOTO PANITIA" },
             { "id": "1GDSoj4cERaGJ67u_Hx2f-AwWp_XignuB", "kategori": "FOTO PANITIA" },
@@ -476,7 +476,6 @@
             { "id": "1aBWZs8RUALtwTyGyd1mP7IVvpQ8WTmPQ", "kategori": "FOTO PERKELAS" },
             { "id": "1juK8MpkwbJMpUfTQCRbgltd2kGqPr24b", "kategori": "FOTO PERKELAS" },
             { "id": "1bX1ZSpPc4rboPcb7AhYNGZIA-vJ4_6iE", "kategori": "FOTO PERKELAS" },
-            { "id": "1z_-dl_OU-LEB2_VIcVyyDMiLW35Y00mi", "kategori": "FOTO PERKELAS" },
             { "id": "1z_-dl_OU-LEB2_VIcVyyDMiLW35Y00mi", "kategori": "FOTO PERKELAS" },
             { "id": "1zeWdyhoqN5rez-tAAWs53h9mP1F0NARJ", "kategori": "FOTO PERKELAS" },
             { "id": "1DP4x-yXPYoCpuZt3Eyi6UTBh7jcmD7tf", "kategori": "FOTO PERKELAS" },
@@ -738,10 +737,9 @@
 
             buildSidebarMenu();
             renderCategoryGrid("SEMUA FOTO");
-            periksaPanduanFirstTime(); // Jalankan auto-check popup panduan
+            periksaPanduanFirstTime();
         }
 
-        // 🚨 FUNGSI BARU: Logika pengontrol Popup Panduan berbasis LocalStorage (Muncul cuma sekali)
         function periksaPanduanFirstTime() {
             const sudahPaham = localStorage.getItem('memori_guide_paham');
             if (!sudahPaham) {
@@ -751,6 +749,12 @@
         function tutupPopupPanduan() {
             localStorage.setItem('memori_guide_paham', 'true');
             document.getElementById('guidePopup').classList.remove('active');
+        }
+
+        // 🚨 FUNGSI BARU: Pemanggil ulang popup panduan dari klik item di Sidebar
+        function panggilUlangPanduan() {
+            closeSidebar(); // Tutup drawer sidebar dulu biar gak numpuk
+            document.getElementById('guidePopup').classList.add('active');
         }
 
         function buildSidebarMenu() {
